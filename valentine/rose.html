@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rose Day 🌹</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Poppins,sans-serif;
+  background:radial-gradient(circle,#ffd6d6 0%,#f7caca 45%,#f2bcbc 100%);
+  overflow-x:hidden;
+}
+
+/* ================= GIFT ================= */
+.gift-stage{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.gift-box{
+  position:relative;
+  width:220px;
+  height:220px;
+  background:#b84747;
+  border-radius:22px;
+  box-shadow:0 30px 60px rgba(0,0,0,.3);
+  cursor:pointer;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.gift-lid{
+  position:absolute;
+  top:-30px;
+  left:-10px;
+  width:240px;
+  height:44px;
+  background:#efe08b;
+  border-radius:22px;
+  transform-origin:bottom center;
+  transition:.6s ease;
+}
+.gift-box.open .gift-lid{
+  transform:rotate(-20deg) translateY(-20px);
+}
+
+.gift-heart{
+  width:90px;height:90px;
+  background:rgba(255,255,255,.18);
+  transform:rotate(45deg);
+}
+.gift-heart::before,
+.gift-heart::after{
+  content:"";
+  width:90px;height:90px;
+  background:rgba(255,255,255,.18);
+  border-radius:50%;
+  position:absolute;
+}
+.gift-heart::before{top:-45px}
+.gift-heart::after{left:-45px}
+
+.click-text{
+  position:absolute;
+  bottom:12px;
+  color:white;
+}
+
+/* CONFETTI */
+.confetti{
+  position:absolute;
+  font-size:22px;
+  animation:pop .8s ease forwards;
+  pointer-events:none;
+}
+@keyframes pop{
+  from{transform:translate(0,0);opacity:1}
+  to{transform:translate(var(--x),var(--y)) scale(.4);opacity:0}
+}
+
+/* BOUQUET */
+.bouquet{
+  margin-top:10px;
+  opacity:0;
+  transform:scale(.85);
+  transition:1s ease;
+}
+.bouquet.show{opacity:1;transform:scale(1)}
+
+.rose-text{
+  margin-top:25px;
+  font-family:'Pacifico',cursive;
+  font-size:2.6rem;
+  color:#b84747;
+  white-space:nowrap;
+  overflow:hidden;
+  border-right:3px solid #b84747;
+  width:0;
+}
+
+/* ================= QUESTIONS ================= */
+.questions{
+  opacity:0;
+  transform:translateY(80px);
+  transition:1s ease;
+}
+.questions.visible{opacity:1;transform:translateY(0)}
+
+.zigzag{
+  display:flex;
+  flex-direction:column;
+  gap:100px;
+  padding:80px 0;
+}
+
+.qa-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:40px;
+}
+.qa-row.left{flex-direction:row}
+.qa-row.right{flex-direction:row-reverse}
+
+.lock-card{
+  background:white;
+  max-width:520px;
+  width:100%;
+  padding:35px;
+  border-radius:30px;
+  box-shadow:0 20px 45px rgba(255,105,180,.25);
+}
+
+.options button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:30px;
+  border:2px solid #ffb6d5;
+  background:#fff0f6;
+  cursor:pointer;
+}
+
+.correct{background:#c8f7c5!important}
+.wrong{background:#ffd6d6!important}
+
+.try-again{color:#ff3b3b;margin-top:10px}
+
+.reveal-img{
+  width:300px;
+  height:300px;
+  object-fit:cover;
+  border-radius:22px;
+  padding:6px;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4,#ffd1ff);
+  box-shadow:0 15px 35px rgba(255,105,180,.35);
+  display:none;
+}
+.reveal-img.show{
+  display:block;
+  animation:imgPop .9s ease;
+}
+@keyframes imgPop{
+  0%{transform:scale(0);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+
+/* NEXT DAY */
+.next-btn{
+  display:block;
+  margin:80px auto 40px;
+  padding:18px 45px;
+  font-size:1.2rem;
+  border-radius:45px;
+  background:#8b4513;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+/* POPUP */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+.popup{
+  background:white;
+  padding:30px;
+  border-radius:25px;
+  text-align:center;
+  max-width:420px;
+}
+.popup button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border-radius:30px;
+  border:none;
+}
+.play-btn{background:#ff69b4;color:white}
+.wait-btn{background:#eee}
+
+/* MOBILE */
+@media(max-width:900px){
+  .qa-row{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<!-- GIFT -->
+<section class="gift-stage">
+  <div class="gift-box" id="giftBox">
+    <div class="gift-lid"></div>
+    <div class="gift-heart"></div>
+    <div class="click-text">🎁 Click on me</div>
+  </div>
+
+  <div class="bouquet" id="bouquet">
+    <img src="images/bouquet.png" width="380">
+  </div>
+
+  <div class="rose-text" id="roseText"></div>
+</section>
+
+<!-- QUESTIONS -->
+<section class="questions zigzag" id="questions">
+
+  <div class="qa-row left">
+    <div class="lock-card">
+      <h3>🔐 i can make you smile by this</h3>
+      <p>what do you think, i did with my first flower</p>
+      <div class="options">
+        <button onclick="checkMCQ(0,this,0)">Keep it in my diary</button>
+        <button onclick="checkMCQ(0,this,1)">plant it in my balcony</button>
+        <button onclick="checkMCQ(0,this,2)">Lost it</button>
+      </div>
+      <div class="try-again"></div>
+    </div>
+    <img src="images/img1.jpeg" class="reveal-img" id="img0">
+  </div>
+
+  <div class="qa-row right">
+    <div class="lock-card">
+      <h3>🌹 one more for you</h3>
+      <p>how many colors of roses did i get?</p>
+      <div class="options">
+        <button onclick="checkMCQ(1,this,0)">3</button>
+        <button onclick="checkMCQ(1,this,1)">4</button>
+        <button onclick="checkMCQ(1,this,2)">2</button>
+      </div>
+      <div class="try-again"></div>
+    </div>
+    <img src="images/img2.jpeg" class="reveal-img" id="img1">
+  </div>
+
+  <div class="qa-row left">
+    <div class="lock-card">
+      <h3>💭 last one</h3>
+      <p>we unexpectedly enjoyed this date very often?</p>
+      <div class="options">
+        <button onclick="checkMCQ(2,this,0)">25 oct</button>
+        <button onclick="checkMCQ(2,this,1)">12 nov</button>
+        <button onclick="checkMCQ(2,this,2)">3 july</button>
+      </div>
+      <div class="try-again"></div>
+    </div>
+    <img src="images/img3.jpeg" class="reveal-img" id="img2">
+  </div>
+
+  <button class="next-btn" onclick="goToChocolate()">Go to Chocolate Day 🍫</button>
+</section>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="lockPopup">
+  <div class="popup">
+    <h2>Too excited? 😏</h2>
+    <p>Chocolate Day opens on <b>8 Feb</b></p>
+    <button class="play-btn" onclick="window.location.href='unlock.html'">
+      🎮 Play Game to Unlock
+    </button>
+    <button class="wait-btn" onclick="closePopup()">I’ll wait</button>
+  </div>
+</div>
+
+<script>
+/* GIFT */
+const giftBox=document.getElementById("giftBox");
+const bouquet=document.getElementById("bouquet");
+const roseText=document.getElementById("roseText");
+
+function popConfetti(){
+  const e=["🎉","❤️","✨","💖"];
+  for(let i=0;i<18;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.innerText=e[Math.floor(Math.random()*e.length)];
+    c.style.left="50%";
+    c.style.top="45%";
+    c.style.setProperty("--x",(Math.random()*400-200)+"px");
+    c.style.setProperty("--y",(-Math.random()*400-120)+"px");
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),800);
+  }
+}
+
+const msg="Happy Happy Rose Day my love ✨💖";
+let t=0;
+function typeWriter(){
+  if(t<msg.length){
+    roseText.textContent+=msg[t++];
+    roseText.style.width=t+"ch";
+    setTimeout(typeWriter,90);
+  }else roseText.style.borderRight="none";
+}
+
+giftBox.onclick=()=>{
+  giftBox.classList.add("open");
+  popConfetti();
+  bouquet.classList.add("show");
+  roseText.textContent="";
+  roseText.style.width="0";
+  roseText.style.borderRight="3px solid #b84747";
+  t=0;
+  setTimeout(typeWriter,600);
+};
+
+/* QUESTIONS VISIBILITY */
+new IntersectionObserver(e=>{
+  if(e[0].isIntersecting)
+    document.getElementById("questions").classList.add("visible");
+},{threshold:.15}).observe(document.getElementById("questions"));
+
+/* QUIZ */
+const correct=[2,1,1];
+function checkMCQ(q,btn,opt){
+  const card=btn.closest(".lock-card");
+  card.querySelector(".try-again").textContent="";
+  if(opt===correct[q]){
+    btn.classList.add("correct");
+    document.getElementById("img"+q).classList.add("show");
+  }else{
+    btn.classList.add("wrong");
+    card.querySelector(".try-again").textContent="Baby 😤 try again";
+  }
+}
+
+/* DATE LOCK (FIXED) */
+function isChocolateDay(){
+  const d=new Date();
+  return (d.getMonth()===1 && d.getDate()>=8); // Feb = 1
+}
+
+function goToChocolate(){
+  const unlocked = localStorage.getItem("unlocked");
+  if(isChocolateDay() || unlocked==="true"){
+    window.location.href="chocolate.html";
+  }else{
+    document.getElementById("lockPopup").style.display="flex";
+  }
+}
+
+function closePopup(){
+  document.getElementById("lockPopup").style.display="none";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kiss Day 💋</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Poppins,sans-serif;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#ffd6e6,#ff9eb5,#ff7aa2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* ===== STAGE ===== */
+.stage{
+  text-align:center;
+  width:100%;
+  max-width:900px;
+  padding:30px;
+}
+
+h1{
+  font-family:'Pacifico',cursive;
+  font-size:3.2rem;
+  color:#9b004f;
+}
+
+.sub{
+  margin-top:10px;
+  font-size:1.1rem;
+  color:#5a0030;
+}
+
+/* ===== LOCK ===== */
+.lock{
+  margin:50px auto;
+  width:240px;
+  height:240px;
+  background:#9b004f;
+  border-radius:30px;
+  position:relative;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.04)}
+}
+
+.heart{
+  font-size:5rem;
+  color:#ffd1e3;
+}
+
+.tap-hint{
+  margin-top:15px;
+  font-size:1.1rem;
+  color:#5a0030;
+}
+
+/* ===== PROGRESS ===== */
+.progress{
+  margin-top:20px;
+  font-size:1.2rem;
+}
+
+/* ===== SHAKE ===== */
+.shake{
+  animation:shake .5s;
+}
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  50%{transform:translateX(8px)}
+  75%{transform:translateX(-8px)}
+  100%{transform:translateX(0)}
+}
+
+/* ===== SUCCESS ===== */
+.success{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:25px;
+}
+
+.success h2{
+  font-family:'Pacifico',cursive;
+  font-size:3rem;
+  color:#9b004f;
+}
+
+.note{
+  background:#ff7aa2;
+  padding:30px;
+  border-radius:25px;
+  font-size:1.3rem;
+  color:white;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+/* ===== POPPERS ===== */
+.pop{
+  position:absolute;
+  font-size:24px;
+  animation:pop 1.2s ease-out forwards;
+}
+@keyframes pop{
+  from{transform:scale(1);opacity:1}
+  to{transform:translateY(-140px) scale(.3);opacity:0}
+}
+
+/* NEXT */
+.next-btn{
+  padding:16px 45px;
+  border:none;
+  border-radius:40px;
+  background:#9b004f;
+  color:white;
+  font-size:1.1rem;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stage" id="stage">
+
+  <h1>Kiss Lock 💋</h1>
+  <div class="sub">
+    Give kisses in the right rhythm<br>
+    Too fast or wrong → lock resets 😈
+  </div>
+
+  <div class="lock" id="lock">
+    <div class="heart">❤️</div>
+  </div>
+
+  <div class="tap-hint">
+    Tap gently… not like a maniac 😏
+  </div>
+
+  <div class="progress">
+    Kisses: <span id="count">0</span> / 5
+  </div>
+
+</div>
+
+<!-- SUCCESS -->
+<div class="stage success" id="success">
+  <h2>Unlocked 😘</h2>
+
+  <div class="note">
+    Ye kisses sirf game ke liye nahi the 💋<br>
+    Real m meri 5 kisses , intrest k sath de diyo please 😌
+  </div>
+
+  <button class="next-btn" onclick="location.href='valentine.html'">
+    Go to Valentine Day ❤️
+  </button>
+</div>
+
+<script>
+const lock=document.getElementById("lock");
+const countEl=document.getElementById("count");
+const stage=document.getElementById("stage");
+const success=document.getElementById("success");
+
+let taps=[];
+let count=0;
+
+/* CONFETTI */
+function popper(){
+  const e=["💋","✨","💖","🔥"];
+  for(let i=0;i<8;i++){
+    const p=document.createElement("div");
+    p.className="pop";
+    p.innerText=e[Math.floor(Math.random()*e.length)];
+    p.style.left=50+Math.random()*200-100+"px";
+    p.style.top=50+Math.random()*200-100+"px";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+
+/* CLICK */
+lock.onclick=()=>{
+  const now=Date.now();
+  taps.push(now);
+
+  if(taps.length>1){
+    const diff=now-taps[taps.length-2];
+
+    // too fast or too slow
+    if(diff<600 || diff>1600){
+      resetLock();
+      return;
+    }
+  }
+
+  count++;
+  countEl.innerText=count;
+  popper();
+
+  if(count===5){
+    unlock();
+  }
+};
+
+function resetLock(){
+  taps=[];
+  count=0;
+  countEl.innerText=0;
+  lock.classList.add("shake");
+  setTimeout(()=>lock.classList.remove("shake"),500);
+}
+
+function unlock(){
+  stage.style.display="none";
+  success.style.display="flex";
+}
+</script>
+
+</body>
+</html>

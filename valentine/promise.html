@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Promise Day 💍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(180deg,#fff1f6,#ffe0ec,#ffd1e3);
+  min-height:100vh;
+  color:#5a2a3c;
+}
+
+section{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:50px 20px;
+}
+
+/* START */
+.start h1{font-size:3rem}
+.start button{
+  margin-top:40px;
+  padding:18px 55px;
+  border:none;
+  border-radius:50px;
+  background:#ff7aa2;
+  color:white;
+  font-size:1.2rem;
+  cursor:pointer;
+}
+
+/* LETTER */
+.letter-wrap{display:none}
+.letter{
+  max-width:900px;
+  background:#fffafc;
+  padding:70px 60px;
+  border-radius:30px;
+  box-shadow:0 30px 90px rgba(255,105,180,.25);
+  font-family:'Playfair Display',serif;
+  font-size:1.45rem;
+  line-height:2;
+  color:#6b1f4a;
+}
+.letter h2{font-size:3rem;margin-bottom:35px}
+
+/* OPTIONS */
+.options{
+  margin-top:40px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  align-items:flex-start;
+}
+.option{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+}
+.option input{
+  width:22px;
+  height:22px;
+  accent-color:#ff7aa2;
+}
+
+.choice-msg{
+  display:none;
+  margin-top:30px;
+  font-size:1.5rem;
+  font-family:'Playfair Display',serif;
+  color:#b83b6d;
+}
+
+/* VIDEO */
+.video-section{
+  display:none;
+  margin-top:120px;
+  width:100%;
+  max-width:1200px;
+}
+.video-wrap{
+  display:flex;
+  gap:50px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+video{
+  width:520px;
+  max-width:100%;
+  border-radius:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+/* LYRICS */
+.lyrics{
+  max-width:420px;
+  background:#fffafc;
+  padding:35px;
+  border-radius:22px;
+  font-family:'Playfair Display',serif;
+  font-size:1.35rem;
+  line-height:2.3;
+  text-align:left;
+}
+.word{opacity:.25}
+.word.active{opacity:1;color:#ff4f8b;font-weight:700}
+
+/* NEXT */
+.next-btn{
+  margin-top:45px;
+  padding:18px 60px;
+  border:none;
+  border-radius:50px;
+  background:#ff7aa2;
+  color:white;
+  font-size:1.2rem;
+  cursor:pointer;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<section class="start" id="start">
+  <h1>Are you ready to promise me something 💍</h1>
+  <button onclick="showLetter()">Yes, I am 💖</button>
+</section>
+
+<section class="letter-wrap" id="letterWrap">
+  <div class="letter">
+    <h2>My Promise 🤍</h2>
+
+    <p>Tujhe pta h m tera peecha kbhi nhi chodungi ...</p>
+    <p>esliye promise me ki tu hume kbhi alag nhi hone dega , </p>
+    <P> Hum sath m bde hue from class 9th , class 11th or 12th to you know best years.... </P>
+    <P> uske baad kitna kucuh bdl gya from talking 24hrs in a day to not talking for 5 consecutive days (including festival) we gain, we loose , we hide , we find </P>
+    <P> But only ek chiz h jo kbhi nhi bdli  </P>
+    <P><B>Us </B></P>
+    <p> at the end hume pta hota h ki maine tujhe kitna bhi bura bhla sunaya ho gusse m or tune mujhe kitna hi forgranted liya ho , hume sukoon yhi milta h </p>
+    <p> So please hum kbhi haar nhi manenge , hum kar lenge  h na ?</p>
+
+    <div class="options">
+      <label class="option">
+        <input type="checkbox" id="yesOption">
+        I, Dhruv, promise to never break us.
+      </label>
+
+      <label class="option">
+        <input type="checkbox" id="noOption">
+        I can’t choose you.
+      </label>
+    </div>
+
+    <div class="choice-msg" id="choiceMsg"></div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="video-section" id="videoSection">
+    <div class="video-wrap">
+      <video id="promiseVideo" controls>
+        <source src="images/video.mp4" type="video/mp4">
+      </video>
+
+      <div class="lyrics">
+        <span class="word">tu</span>
+        <span class="word">hoga</span>
+        <span class="word">zra</span>
+        <span class="word">pagal</span>
+        <span class="word">tune</span>
+        <span class="word">mujhko</span>
+        <span class="word">hai</span>
+        <span class="word">chuna</span>
+        <span class="word">kaise</span>
+        <span class="word">tune</span>
+        <span class="word">ankha</span><br><br>
+
+        <span class="word">tune</span>
+        <span class="word">ankha</span><br><br>
+
+        <span class="word">sab</span>
+        <span class="word">suna</span>.....<br><br>
+
+        <span class="word">tu</span>
+        <span class="word">hoga</span>
+        <span class="word">zra</span>
+        <span class="word">pagal</span>
+        <span class="word">tune</span>
+        <span class="word">mujhko</span>
+        <span class="word">hai</span>
+        <span class="word">chuna</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT BUTTON -->
+  <button class="next-btn" id="hugBtn"
+    onclick="location.href='hug.html'">
+    Go to Hug Day 🫂
+  </button>
+</section>
+
+<script>
+function showLetter(){
+  start.style.display="none";
+  letterWrap.style.display="flex";
+  letterWrap.style.flexDirection="column";
+}
+
+const yesOpt=document.getElementById("yesOption");
+const noOpt=document.getElementById("noOption");
+const msg=document.getElementById("choiceMsg");
+const videoSection=document.getElementById("videoSection");
+const hugBtn=document.getElementById("hugBtn");
+
+/* YES */
+yesOpt.addEventListener("change",()=>{
+  noOpt.checked=false;
+  msg.style.display="block";
+  msg.innerText="Why always ready to choose me 🤍";
+
+  setTimeout(()=>{
+    videoSection.style.display="block";
+    hugBtn.style.display="block";
+    videoSection.scrollIntoView({behavior:"smooth"});
+  },1000);
+});
+
+/* NO */
+noOpt.addEventListener("change",()=>{
+  yesOpt.checked=false;
+  msg.style.display="block";
+  msg.innerText="I’ll make you choose me 😌";
+
+  videoSection.style.display="none";
+  hugBtn.style.display="block";
+  hugBtn.scrollIntoView({behavior:"smooth"});
+});
+
+/* WORD HIGHLIGHT 1s */
+const video=document.getElementById("promiseVideo");
+const words=document.querySelectorAll(".word");
+let i=0, timer;
+
+video.addEventListener("play",()=>{
+  words.forEach(w=>w.classList.remove("active"));
+  i=0;
+  timer=setInterval(()=>{
+    if(i<words.length){
+      words[i].classList.add("active");
+      i++;
+    } else clearInterval(timer);
+  },1000);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Valentine Week 💖</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+
+<div class="hero">
+  <div class="hero-card">
+    <h1>💖 Hey You 💖</h1>
+    <p>Will you start Valentine Week with me?</p>
+    <button class="yes" onclick="location.href='quiz.html'">YES 🥰</button>
+    <button class="no" id="noBtn">NO 😜</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.position = "absolute";
+  noBtn.style.left = Math.random()*70 + "%";
+  noBtn.style.top = Math.random()*70 + "%";
+});
+</script>
+
+</body>
+</html>

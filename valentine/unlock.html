@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unlock With Love 🐍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  min-height:100vh;
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(180deg,#1a0f1a,#3b183b);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* CONTAINER */
+.game{
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+  padding:30px 20px 80px;
+}
+
+/* TITLE */
+h1{
+  text-align:center;
+  font-family:Pacifico,cursive;
+  color:#ff9ad5;
+  margin-bottom:25px;
+}
+
+/* SNAKE PATH */
+.path{
+  display:flex;
+  flex-direction:column;
+  gap:45px;
+  position:relative;
+}
+
+/* CONNECTOR */
+.path::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  width:4px;
+  height:100%;
+  background:linear-gradient(#ff69b4,#ff9ad5);
+  transform:translateX(-50%);
+  opacity:.4;
+}
+
+/* NODE */
+.node{
+  width:100%;
+  max-width:320px;
+  padding:18px;
+  border-radius:22px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  position:relative;
+  transition:.4s;
+}
+
+.node.left{align-self:flex-start}
+.node.right{align-self:flex-end}
+
+.node.locked{
+  opacity:.4;
+  filter:blur(1px);
+}
+
+.node.active{
+  background:rgba(255,255,255,.15);
+  box-shadow:0 0 25px rgba(255,105,180,.7);
+}
+
+.node.done{
+  background:rgba(140,255,199,.18);
+}
+
+/* QUESTION */
+.question{
+  font-size:1rem;
+  margin-bottom:10px;
+}
+
+/* INPUT */
+input{
+  width:100%;
+  padding:12px;
+  border-radius:16px;
+  border:none;
+  outline:none;
+  font-size:.95rem;
+}
+
+/* FEEDBACK */
+.feedback{
+  min-height:18px;
+  margin-top:8px;
+  font-size:.85rem;
+  color:#ff9a9a;
+  opacity:0;
+  transition:.3s;
+}
+
+.feedback.show{opacity:1}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.popup-box{
+  background:white;
+  color:#333;
+  padding:28px;
+  border-radius:22px;
+  text-align:center;
+  max-width:320px;
+}
+
+/* SUCCESS SCREEN */
+.finish{
+  text-align:center;
+  margin-top:40px;
+}
+
+.finish button{
+  margin-top:20px;
+  padding:14px 36px;
+  border-radius:40px;
+  border:none;
+  background:#ff69b4;
+  color:white;
+  font-size:1rem;
+}
+
+/* MOBILE */
+@media(max-width:420px){
+  .node{max-width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+  <h1>Unlock With Love 🐍</h1>
+
+  <div class="path" id="path"></div>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <p>😌 Muskan ko date pe le jaana hoga</p>
+    <button onclick="closePopup()">Okay 💕</button>
+  </div>
+</div>
+
+<script>
+const puzzles=[
+  {q:"Wo konsi chiz hai jiska 90% haath hai ki hum yahan hain (neev)?",a:["whatsapp"]},
+  {q:"Muskan ko propose karne se pehle pyaar tha ya baad mein hua?",a:["pehle","pehle tha"]},
+  {q:"Wo kya hai jo tera hai but use wo sabse zyada use karti hai?",a:["dhruv","mera naam dhruv"]},
+  {q:"Ek cheez jo Muskan ko bilkul pasand nahi?",a:["jhuth","jhoot"]},
+  {q:"Kya Dhruv Muskan se achi ladki deserve karta hai?",a:["yes","haan","ha"]}
+];
+
+let current=0;
+let tries=0;
+
+const path=document.getElementById("path");
+const popup=document.getElementById("popup");
+
+/* BUILD NODES */
+puzzles.forEach((p,i)=>{
+  const node=document.createElement("div");
+  node.className=`node ${i%2===0?"left":"right"} ${i===0?"active":"locked"}`;
+  node.innerHTML=`
+    <div class="question">${p.q}</div>
+    <input type="text" placeholder="Type answer & press Enter">
+    <div class="feedback">Socho dobara 😏</div>
+  `;
+  path.appendChild(node);
+});
+
+const nodes=document.querySelectorAll(".node");
+
+nodes.forEach((node,i)=>{
+  const input=node.querySelector("input");
+  const feedback=node.querySelector(".feedback");
+
+  input.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      checkAnswer(i,input,feedback);
+    }else{
+      feedback.classList.remove("show");
+    }
+  });
+});
+
+function checkAnswer(i,input,feedback){
+  if(i!==current) return;
+
+  const val=input.value.trim().toLowerCase();
+  if(!val) return;
+
+  const correct=puzzles[i].a.some(a=>val.includes(a));
+
+  if(correct){
+    nodes[i].classList.add("done");
+    nodes[i].classList.remove("active");
+    input.disabled=true;
+    current++;
+    tries=0;
+
+    if(nodes[current]){
+      nodes[current].classList.remove("locked");
+      nodes[current].classList.add("active");
+      nodes[current].scrollIntoView({behavior:"smooth",block:"center"});
+    }else{
+      finishGame();
+    }
+  }else{
+    tries++;
+    feedback.classList.add("show");
+    if(tries>=3){
+      popup.style.display="flex";
+    }
+  }
+}
+
+function closePopup(){
+  popup.style.display="none";
+  nodes[current].classList.add("done");
+  nodes[current].classList.remove("active");
+  current++;
+  tries=0;
+
+  if(nodes[current]){
+    nodes[current].classList.remove("locked");
+    nodes[current].classList.add("active");
+    nodes[current].scrollIntoView({behavior:"smooth",block:"center"});
+  }else{
+    finishGame();
+  }
+}
+
+function finishGame(){
+  localStorage.setItem("unlocked","true");
+  document.querySelector(".game").innerHTML=`
+    <div class="finish">
+      <h1>Unlocked 💖</h1>
+      <p>Tumne saari paheliyaan paar kar li 🥰</p>
+      <button onclick="window.location.href='chocolate.html'">
+        Go to Chocolate Day 🍫
+      </button>
+    </div>`;
+}
+</script>
+
+</body>
+</html>

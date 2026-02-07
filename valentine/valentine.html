@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Day ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  height:100vh;
+  background:radial-gradient(circle at top,#1a0008,#000);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Poppins,sans-serif;
+  color:white;
+  overflow:hidden;
+}
+
+/* ===== STAGE ===== */
+.stage{
+  text-align:center;
+  max-width:900px;
+  width:100%;
+  padding:40px;
+}
+
+/* HEART */
+.heart{
+  font-size:5rem;
+  animation:beat 1.3s infinite;
+}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+.title{
+  font-family:'Pacifico',cursive;
+  font-size:3.4rem;
+  margin-top:20px;
+}
+
+.sub{
+  margin-top:10px;
+  opacity:.8;
+}
+
+/* BUTTONS */
+.choices{
+  margin-top:60px;
+  display:flex;
+  gap:40px;
+  justify-content:center;
+}
+
+button{
+  padding:18px 45px;
+  font-size:1.1rem;
+  border-radius:40px;
+  border:none;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.choose{
+  background:#ff2f6d;
+  color:white;
+  box-shadow:0 15px 40px rgba(255,47,109,.5);
+}
+
+.leave{
+  background:#444;
+  color:white;
+  position:relative;
+}
+
+/* RUN AWAY */
+.leave:hover{
+  transform:translateX(calc(-120px + 240px * random()));
+}
+
+/* ===== CONFESSION ===== */
+.confession{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:25px;
+}
+
+.line{
+  font-size:1.8rem;
+  font-family:'Pacifico',cursive;
+  opacity:0;
+  transform:translateY(20px);
+  transition:1s;
+}
+
+.line.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.final{
+  margin-top:40px;
+  font-size:2.4rem;
+  color:#ff7aa2;
+}
+
+/* POPPERS */
+.pop{
+  position:absolute;
+  font-size:22px;
+  animation:pop 1.5s ease-out forwards;
+}
+@keyframes pop{
+  from{opacity:1;transform:scale(1)}
+  to{opacity:0;transform:translateY(-180px) scale(.3)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stage" id="stage">
+  <div class="heart">❤️</div>
+  <div class="title">Valentine Day</div>
+  <div class="sub">You can choose only once.</div>
+
+  <div class="choices">
+    <button class="leave">Let her go</button>
+    <button class="choose" onclick="choose()">Choose Muskan</button>
+  </div>
+</div>
+
+<!-- CONFESSION -->
+<div class="stage confession" id="confession">
+  <div class="line">I Love you </div>
+  <div class="line">Mera bas chale to m  tujhe humesha paas rkh lu.</div>
+  <div class="line">Ek din hum sath m bethe meri en hrkato pr has rhe honge </div>
+  <div class="line">I promise to be my best version </div>
+  <div class="line">Even when it’s hard.</div>
+
+  <div class="final">
+    Happy Valentine Day ❤️<br>
+    You are already chosen.
+  </div>
+</div>
+
+<script>
+function popper(){
+  const e=["❤️","✨","💖","🔥"];
+  for(let i=0;i<10;i++){
+    const p=document.createElement("div");
+    p.className="pop";
+    p.innerText=e[Math.floor(Math.random()*e.length)];
+    p.style.left=Math.random()*100+"vw";
+    p.style.bottom="0";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1500);
+  }
+}
+
+function choose(){
+  document.getElementById("stage").style.display="none";
+  const c=document.getElementById("confession");
+  c.style.display="flex";
+
+  const lines=document.querySelectorAll(".line");
+  lines.forEach((l,i)=>{
+    setTimeout(()=>l.classList.add("show"),i*1800);
+  });
+
+  setInterval(popper,1200);
+}
+</script>
+
+</body>
+</html>

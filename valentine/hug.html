@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hug Day 🫂</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(180deg,#fff6e5,#ffe2c6,#ffd1a6);
+  min-height:100vh;
+  color:#6b3e14;
+  overflow-x:hidden;
+}
+
+/* SECTION */
+section{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:50px 20px;
+}
+
+/* TITLE */
+h1{
+  font-size:3rem;
+  font-family:'Baloo 2',cursive;
+}
+.subtitle{
+  margin-top:10px;
+  font-size:1.2rem;
+  opacity:.8;
+}
+
+/* TEDDY */
+.teddy-wrap{
+  margin-top:40px;
+  transition:transform .6s ease;
+}
+.teddy{
+  width:170px;
+  transition:transform .6s ease;
+}
+
+/* METER */
+.meter-box{
+  margin-top:30px;
+  width:320px;
+  height:26px;
+  border-radius:30px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.meter-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff9a9e,#fad0c4,#ffd1a6);
+  transition:width .5s ease;
+}
+
+/* COUNT */
+.count{
+  margin-top:15px;
+  font-size:1.4rem;
+  font-weight:600;
+}
+
+/* BUTTON */
+.hug-btn{
+  margin-top:35px;
+  padding:18px 65px;
+  border:none;
+  border-radius:50px;
+  background:#ff9a9e;
+  color:white;
+  font-size:1.2rem;
+  cursor:pointer;
+  box-shadow:0 15px 40px rgba(255,154,158,.5);
+  transition:.3s;
+}
+.hug-btn:hover{transform:scale(1.05)}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  top:50%;
+  left:50%;
+  font-size:22px;
+  animation:blast 1.5s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes blast{
+  from{transform:translate(0,0) scale(1);opacity:1}
+  to{transform:translate(var(--x),var(--y)) scale(.5);opacity:0}
+}
+
+/* GIFT NOTE */
+.gift-wrap{
+  display:none;
+  margin-top:60px;
+  position:relative;
+  width:280px;
+  height:200px;
+  background:#ff9a9e;
+  border-radius:18px;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  cursor:pointer;
+  overflow:hidden;
+}
+.gift-lid{
+  position:absolute;
+  top:0;
+  width:100%;
+  height:45px;
+  background:#ff6f91;
+  transition:.6s ease;
+}
+.gift-wrap.open .gift-lid{
+  transform:translateY(-60px) rotate(-6deg);
+}
+.ribbon{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:12px;
+  height:100%;
+  background:#fff;
+  transform:translateX(-50%);
+  display: none !important;
+}
+
+.note{
+  display:none;
+  padding:25px;
+  font-size:1.2rem;
+  color:white;
+  font-weight:500;
+}
+.gift-wrap.open .note{
+  display:block;
+}
+
+/* MESSAGE */
+.msg{
+  margin-top:30px;
+  font-size:2.2rem;
+  font-family:'Baloo 2',cursive;
+  display:none;
+}
+
+/* NEXT */
+.next-btn{
+  margin-top:45px;
+  padding:18px 65px;
+  border:none;
+  border-radius:50px;
+  background:#ff7a00;
+  color:white;
+  font-size:1.2rem;
+  cursor:pointer;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<section>
+  <h1>Hug Day 🫂</h1>
+  <div class="subtitle">Give hugs… don’t be shy</div>
+
+  <!-- TEDDY -->
+  <div class="teddy-wrap">
+    <img src="images/teddy.png" class="teddy" id="teddy">
+  </div>
+
+  <!-- METER -->
+  <div class="meter-box">
+    <div class="meter-fill" id="meter"></div>
+  </div>
+
+  <div class="count" id="countText">Hugs: 0 / 21</div>
+
+  <!-- BUTTON -->
+  <button class="hug-btn" onclick="giveHug()">Give a Hug 🤗</button>
+
+  <!-- GIFT -->
+  <div class="gift-wrap" id="gift" onclick="openGift()">
+    <div class="gift-lid"></div>
+    <div class="ribbon"></div>
+    <div class="note">
+      mujhe 5 min wala long hug dega tu 😌🫂<br><br>
+   
+    </div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div class="msg" id="finalMsg">
+    Happy Hug Day 💛
+  </div>
+
+  <!-- NEXT -->
+  <button class="next-btn" id="nextBtn"
+    onclick="location.href='kiss.html'">
+    Go to Kiss Day 😘
+  </button>
+</section>
+
+<script>
+let hugs = 0;
+const maxHugs = 21;
+
+const meter = document.getElementById("meter");
+const countText = document.getElementById("countText");
+const teddy = document.getElementById("teddy");
+const gift = document.getElementById("gift");
+const msg = document.getElementById("finalMsg");
+const nextBtn = document.getElementById("nextBtn");
+
+function giveHug(){
+  if(hugs >= maxHugs) return;
+
+  hugs++;
+  meter.style.width = (hugs/maxHugs)*100 + "%";
+  countText.innerText = `Hugs: ${hugs} / ${maxHugs}`;
+
+  teddy.style.transform = `scale(${1 + hugs*0.04})`;
+
+  if(hugs === maxHugs){
+    celebrate();
+    gift.style.display="block";
+    msg.style.display="block";
+  }
+}
+
+function celebrate(){
+  const emojis=["🎉","🎊","💖","✨","🫂"];
+  for(let i=0;i<25;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.setProperty("--x",(Math.random()*600-300)+"px");
+    c.style.setProperty("--y",(Math.random()*-500)+"px");
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1500);
+  }
+}
+
+function openGift(){
+  gift.classList.add("open");
+  setTimeout(()=>{
+    nextBtn.style.display="inline-block";
+    nextBtn.scrollIntoView({behavior:"smooth"});
+  },800);
+}
+</script>
+
+</body>
+</html>
